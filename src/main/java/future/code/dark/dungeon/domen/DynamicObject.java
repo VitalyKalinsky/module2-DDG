@@ -37,7 +37,7 @@ public abstract class DynamicObject extends AnimatedObject {
     }
 
     private Boolean isAllowedSurface(int x, int y) {
-        return gameMaster.getMap().getMap()[y][x] != Configuration.WALL_CHARACTER &&
-                (gameMaster.getMap().getMap()[y][x] != Configuration.EXIT_CHARACTER || gameMaster.remainCoins == 0);
+        return GameMaster.getInstance().getMap().getMap()[y][x] != Configuration.WALL_CHARACTER &&
+                (GameMaster.getInstance().getMap().getMap()[y][x] != Configuration.EXIT_CHARACTER || GameMaster.getInstance().remainCoins == 0);
     }
 }

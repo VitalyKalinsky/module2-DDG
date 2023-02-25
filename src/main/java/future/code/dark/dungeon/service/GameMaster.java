@@ -1,6 +1,5 @@
 package future.code.dark.dungeon.service;
 
-import future.code.dark.dungeon.config.Configuration;
 import future.code.dark.dungeon.domen.Coin;
 import future.code.dark.dungeon.domen.DynamicObject;
 import future.code.dark.dungeon.domen.Enemy;
@@ -9,7 +8,6 @@ import future.code.dark.dungeon.domen.GameObject;
 import future.code.dark.dungeon.domen.Map;
 import future.code.dark.dungeon.domen.Player;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -17,22 +15,16 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static future.code.dark.dungeon.config.Configuration.COIN_CHARACTER;
-import static future.code.dark.dungeon.config.Configuration.ENEMIES_ACTIVE;
-import static future.code.dark.dungeon.config.Configuration.ENEMY_CHARACTER;
-import static future.code.dark.dungeon.config.Configuration.EXIT_CHARACTER;
-import static future.code.dark.dungeon.config.Configuration.PLAYER_CHARACTER;
+import static future.code.dark.dungeon.config.Configuration.*;
 
 public class GameMaster {
-
     private static GameMaster instance;
-
     private final Map map;
     private final List<GameObject> gameObjects;
-
     public int currentCoins;
-
     public int remainCoins;
+    int FRAME_WIDTH;
+    int FRAME_HEIGHT;
 
     public static synchronized GameMaster getInstance() {
         if (instance == null) {
@@ -43,7 +35,9 @@ public class GameMaster {
 
     private GameMaster() {
         try {
-            this.map = new Map(Configuration.MAP_FILE_PATH);
+            this.map = new Map(MAP_FILE_PATH);
+            this.FRAME_HEIGHT = map.getHeight() * SPRITE_SIZE;
+            this.FRAME_WIDTH = map.getWidth() * SPRITE_SIZE;
             this.gameObjects = initGameObjects(map.getMap());
             this.currentCoins = 0;
             this.remainCoins = (int) gameObjects.stream().filter(el -> el instanceof Coin).count();
@@ -58,7 +52,6 @@ public class GameMaster {
         Consumer<Enemy> addEnemy = enemy -> {
             if (ENEMIES_ACTIVE) gameObjects.add(enemy);
         };
-
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 switch (map[i][j]) {
@@ -83,13 +76,15 @@ public class GameMaster {
         graphics.drawString("Coins: " + currentCoins + ". Coins remain: " + remainCoins, 100, 20);
         if (getPlayer().isDead()) {
             graphics.setColor(Color.BLACK);
-            graphics.fillRect(0, 0, 1152, 768);
-            graphics.drawImage(new ImageIcon(Configuration.GAME_OVER_SCREEN).getImage(), 270, 170, null);
+            graphics.fillRect(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
+            graphics.drawImage(GAME_OVER_SCREEN, (FRAME_WIDTH - GAME_OVER_SCREEN.getWidth(null)) / 2,
+                    (FRAME_HEIGHT - GAME_OVER_SCREEN.getHeight(null)) / 2, null);
         }
         if (getPlayer().isWon() && !getPlayer().isDead()) {
             graphics.setColor(Color.BLACK);
-            graphics.fillRect(0, 0, 1152, 768);
-            graphics.drawImage(new ImageIcon(Configuration.VICTORY_SCREEN).getImage(), 176, -50, null);
+            graphics.fillRect(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
+            graphics.drawImage(VICTORY_SCREEN, (FRAME_WIDTH - VICTORY_SCREEN.getWidth(null)) / 2,
+                    (FRAME_HEIGHT - VICTORY_SCREEN.getHeight(null)) / 2, null);
             getPlayer().isFinished = true;
         }
     }

@@ -1,11 +1,20 @@
 package future.code.dark.dungeon.config;
 
+import future.code.dark.dungeon.domen.Map;
+
+import javax.swing.*;
+import java.awt.*;
+
 public interface Configuration {
 
     String GAME_NAME="Dark Dungeon";
     String MAP_FILE_PATH = "src/main/resources/maps/map.ber";
     Boolean ENEMIES_ACTIVE = true;
+    Image GAME_OVER_SCREEN = new ImageIcon("src/main/resources/assets/game_over_screen.jpeg").getImage();
+    Image VICTORY_SCREEN = new ImageIcon("src/main/resources/assets/victory.jpg").getImage();
     int GAME_FRAMES_PER_SECOND = 40;
+    int MILLIS_PER_ANIMATION_STAGE = 250;
+    int MILLIS_PER_ENEMY_STAGE = 750;
     char WALL_CHARACTER = '1';
     char EXIT_CHARACTER = 'E';
     char LAND_CHARACTER = '0';
@@ -25,6 +34,4 @@ public interface Configuration {
     String LAND_SPRITE = "src/main/resources/assets/land/ground.png";
     String EXIT_SPRITE = "src/main/resources/assets/land/out.png";
     String COIN_SPRITE = "src/main/resources/assets/land/collectible.png";
-    String GAME_OVER_SCREEN = "src/main/resources/assets/game_over_screen.jpeg";
-    String VICTORY_SCREEN = "src/main/resources/assets/victory.jpg";
 }

@@ -22,9 +22,10 @@ public class Player extends DynamicObject {
     public void move(Direction direction) {
         if(!isDead && !isFinished) {
             super.move(direction);
-            if (gameMaster.getCoins().stream().anyMatch(this::collision))
-                gameMaster.removeCoin(this.xPosition, this.yPosition);
-            if (gameMaster.getMap().getMap()[this.yPosition][this.xPosition] == Configuration.EXIT_CHARACTER)
+            GameMaster.getInstance().getEnemies().forEach(this::enemyCollision);
+            if (GameMaster.getInstance().getCoins().stream().anyMatch(this::collision))
+                GameMaster.getInstance().removeCoin(this.xPosition, this.yPosition);
+            if (GameMaster.getInstance().getMap().getMap()[this.yPosition][this.xPosition] == Configuration.EXIT_CHARACTER)
                 isWon = true;
         }
     }

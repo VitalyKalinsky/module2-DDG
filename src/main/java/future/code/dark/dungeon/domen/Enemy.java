@@ -9,23 +9,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Enemy extends DynamicObject {
-
     public Enemy(int xPosition, int yPosition) {
         super(xPosition, yPosition, Configuration.GHOST_SPRITE);
-        new Thread(() -> {
-            while (true) {
-                moveToPlayer(gameMaster.getPlayer());
-                try {
-                    Thread.sleep(750);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }).start();
     }
 
-    private void moveToPlayer(Player player) {
-        char[][] gameMap = gameMaster.getMap().getMap();
+    public void moveToPlayer(Player player) {
+        char[][] gameMap = GameMaster.getInstance().getMap().getMap();
         List<Direction> dirList = Stream.of(Direction.values()).filter(dir -> {
             switch (dir) {
                 case UP -> {
@@ -49,13 +38,17 @@ public class Enemy extends DynamicObject {
         }).collect(Collectors.toCollection(ArrayList::new));
         if (player.xPosition > this.xPosition && dirList.contains(Direction.RIGHT)) {
             move(Direction.RIGHT);
-        } else if (player.xPosition < this.xPosition && dirList.contains(Direction.LEFT)) {
-            move(Direction.LEFT);
-        } else if (player.yPosition > this.yPosition && dirList.contains(Direction.DOWN)) {
+        }
+        if (player.yPosition > this.yPosition && dirList.contains(Direction.DOWN)) {
             move(Direction.DOWN);
-        } else if (player.yPosition < this.yPosition && dirList.contains(Direction.UP)) {
+        }
+        if (player.xPosition < this.xPosition && dirList.contains(Direction.LEFT)) {
+            move(Direction.LEFT);
+        }
+        if (player.yPosition < this.yPosition && dirList.contains(Direction.UP)) {
             move(Direction.UP);
         }
+
     }
 
 }
